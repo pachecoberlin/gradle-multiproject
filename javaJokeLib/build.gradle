@@ -1,7 +1,20 @@
 apply plugin: 'java-library'
+apply plugin: 'com.google.cloud.tools.endpoints-framework-client'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    endpointsServer project(path: ':backend', configuration: 'endpoints')
+    implementation 'com.google.api-client:google-api-client:1.25.0'
+    implementation 'com.google.http-client:google-http-client-android:1.23.0'
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.google.cloud.tools:endpoints-framework-gradle-plugin:2.0.1'
+    }
 }
 
 sourceCompatibility = "1.7"

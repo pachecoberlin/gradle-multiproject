@@ -3,7 +3,9 @@ package com.udacity.gradle.builditbigger;
 import de.pacheco.javajokelib.Jokes;
 import de.pacheco.jokeshower.JokeShowerActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,23 +14,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
     }
 
 
@@ -54,11 +45,27 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void tellJoke(View view) {
-        String joke = Jokes.giveMeAJoke();
-        Toast.makeText(this, joke, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, JokeShowerActivity.class);
-        intent.putExtra(JokeShowerActivity.JOKE,joke);
-        startActivity(intent);
+    public void tellJoke(final View view) {
+        tellJokeForFriend(view, "Dude");
     }
+
+    @SuppressLint("StaticFieldLeak")
+    public void tellJokeForFriend(final View view, final String friendsName) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                return Jokes.giveMeAJoke(friendsName);
+            }
+
+            @Override
+            protected void onPostExecute(String joke) {
+                Toast.makeText(view.getContext(), joke, Toast.LENGTH_SHORT).show();
+                jokeTester = joke;
+                Intent intent = new Intent(view.getContext(), JokeShowerActivity.class);
+                intent.putExtra(JokeShowerActivity.JOKE, joke);
+                startActivity(intent);
+            }
+        }.execute();
+    }
+    public static String jokeTester;
 }
