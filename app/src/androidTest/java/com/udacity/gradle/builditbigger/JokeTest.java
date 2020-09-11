@@ -17,7 +17,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -31,11 +31,10 @@ public class JokeTest {
     public void jokeTest() {
         MainActivity activity = mActivityTestRule.getActivity();
         View view = activity.findViewById(R.id.joker);
-        activity.tellJoke(
-                view);
-        activity.tellJokeForFriend(view, "Peter");
-        String expectedJoke = "Hi, Peter";
-        assertEquals(expectedJoke,MainActivity.jokeTester);
+        activity.tellJoke(view);
+        assertFalse(MainActivity.jokeTester.isEmpty());
+        activity.tellJokeForFriend(view);
+        assertFalse(MainActivity.jokeTester.isEmpty());
     }
 
     @Test
@@ -43,5 +42,6 @@ public class JokeTest {
         ViewInteraction recyclerView = onView(
                 allOf(withId(R.id.joker)));
         recyclerView.perform(actionOnItemAtPosition(0, click()));
+        assertFalse(MainActivity.jokeTester.isEmpty());
     }
 }

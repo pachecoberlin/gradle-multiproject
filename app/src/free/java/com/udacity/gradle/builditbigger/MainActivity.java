@@ -1,6 +1,5 @@
 package com.udacity.gradle.builditbigger;
 
-import de.pacheco.javajokelib.Jokes;
 import de.pacheco.jokeshower.JokeShowerActivity;
 
 import android.annotation.SuppressLint;
@@ -25,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -57,15 +55,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(final View view) {
-        tellJokeForFriend(view, "Dude");
+        tellJokeForFriend(view);
     }
 
     @SuppressLint("StaticFieldLeak")
-    public void tellJokeForFriend(final View view, final String friendsName) {
+    public void tellJokeForFriend(final View view) {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                return Jokes.giveMeAJoke(friendsName);
+                return JokesEndPointConnection.giveMeAJoke();
             }
 
             @Override

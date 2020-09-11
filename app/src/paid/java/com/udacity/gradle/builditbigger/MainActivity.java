@@ -1,6 +1,5 @@
 package com.udacity.gradle.builditbigger;
 
-import de.pacheco.javajokelib.Jokes;
 import de.pacheco.jokeshower.JokeShowerActivity;
 
 import android.annotation.SuppressLint;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -45,15 +46,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(final View view) {
-        tellJokeForFriend(view, "Dude");
+        tellJokeForFriend(view);
     }
 
     @SuppressLint("StaticFieldLeak")
-    public void tellJokeForFriend(final View view, final String friendsName) {
+    public void tellJokeForFriend(final View view) {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                return Jokes.giveMeAJoke(friendsName);
+                return JokesEndPointConnection.giveMeAJoke();
             }
 
             @Override
